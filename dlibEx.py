@@ -38,7 +38,6 @@ while True:
             cv.circle(img_frame, pt_pos, 2, (0, 255, 0), -1)
 
         cv.rectangle(img_frame, (face.left(), face.top()), (face.right(), face.bottom()), (0, 0, 255), 3)
-
         cv.imshow('result', img_frame)
 
         key = cv.waitKey(1)
