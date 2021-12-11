@@ -26,11 +26,130 @@ TemplateMo 557 Grad School
 https://templatemo.com/tm-557-grad-school
 
 -->
-  </head>
+
+<!--===========================================================================================================-->
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCWKAgyNFV22IpW5EA9MfOBhV6MHOpL7PI",
+    authDomain: "uume-58fe8.firebaseapp.com",
+    databaseURL: "https://uume-58fe8-default-rtdb.firebaseio.com",
+    projectId: "uume-58fe8",
+    storageBucket: "uume-58fe8.appspot.com",
+    messagingSenderId: "1022617126475",
+    appId: "1:1022617126475:web:0569a1422385e31debefce",
+    measurementId: "${config.measurementId}"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+  const database = getDatabase();
+  
+</script>
+
+<script>
+// import { getDatabase } from "firebase/database";
+
+// const database = getDatabase();
+
+// import { getDatabase, ref, set } from "firebase/database";
+
+function writeUserData() {
+  alert("hi");
+  console.log("hihihi");
+  var userId = 915;
+  var name = document.getElementById("name").value;
+  var email = document.getElementById("email").value;
+  var pnum = document.getElementById("phone-number").value;
+
+  //console.log("hihihi");
+  console.log(userId);
+  console.log(name);
+  console.log(email);
+  console.log(pnum);
+
+  const db = getDatabase();
+  set(ref(db, 'users/' + userId), {
+    //userId: userId
+    username: name
+    //email: email,
+    //phonenum : pnum
+  });
+}
+</script>
+<!--===========================================================================================================-->
+</head>
 
 <body>
 
-   
+   <!--=======================================================================================================-->
+   <!-- <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCWKAgyNFV22IpW5EA9MfOBhV6MHOpL7PI",
+      authDomain: "uume-58fe8.firebaseapp.com",
+      databaseURL: "https://uume-58fe8-default-rtdb.firebaseio.com",
+      projectId: "uume-58fe8",
+      storageBucket: "uume-58fe8.appspot.com",
+      messagingSenderId: "1022617126475",
+      appId: "1:1022617126475:web:0569a1422385e31debefce",
+      measurementId: "${config.measurementId}"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    // // 데베 참조 가져오기
+    // import { getDatabase } from "firebase/database";
+
+    // const database = getDatabase();
+
+    // 데이터 쓰기
+    //import { getDatabase, ref, set } from "firebase/database";
+    //writeUserData(userId, name, email, pnum)
+    // function writeUserData() {
+    //   alert("hi");
+    //   console.log("hihihi");
+    //   var userId = 915;
+    //   var name = document.getElementById("name").value;
+    //   var email = document.getElementById("email").value;
+    //   var pnum = document.getElementById("phone-number").value;
+
+    //   //console.log("hihihi");
+    //   console.log(userId);
+    //   console.log(name);
+    //   console.log(email);
+    //   console.log(pnum);
+
+    //   // const db = getDatabase();
+    //   // set(ref(db, 'users/' + userId), {
+    //   //   userId: userId
+    //   //   //username: name,
+    //   //   //email: email,
+    //   //   //phonenum : pnum
+    //   // });
+    // }
+  </script> -->
+  <!--=======================================================================================================-->
+  
   <!--header-->
   <header class="main-header clearfix" role="header">
     <div class="logo">
@@ -243,10 +362,20 @@ https://templatemo.com/tm-557-grad-school
                   <fieldset>
                     <!--<button type="submit" id="form-submit" class="button">Get it now</button>-->
                     <!-- ================================================================================================================== -->
-                    <p id="demo">A Paragraph.</p>
-                    <pre id="object"></pre>
-                    <button type="submit" id="form-submit" class="button" onclick="input()">Get it now</button>
-                    <script>alert("쓰기완료")</script>
+                    <!-- <script>
+                      var userId = 915;
+                      var name = document.getElementById("name").value;
+                      var email = document.getElementById("email").value;
+                      var pnum = document.getElementById("phone-number").value;
+                      console.log("hi");
+                      console.log(userId);
+                      console.log(name);
+                      console.log(email);
+                      console.log(pnum);
+                    </script> -->
+                    <script>console.log("hi")</script>
+                    <button type="submit" id="form-submit" class="button" onclick="writeUserData()">Get it now</button>
+                    <!-- <script>alert("쓰기완료")</script> -->
                     <!-- ================================================================================================================== -->
                   </fieldset>
                 </div>
@@ -520,20 +649,16 @@ https://templatemo.com/tm-557-grad-school
     
     <!-- ================================================================================================================== -->
 
-    <script>
-      // 파이어베이스
-      // var firebaseConfig = {
-      //     apiKey: "AIzaSyBER47eiJoAJfhaP9CdjPuqFkCfPp30",
-      //     authDomain: "webtest-38a08.firebaseapp.com",
-      //     databaseURL: "https://webtest-38a08.firebaseio.com",
-      //     projectId: "webtest-38a08",
-      //     storageBucket: "webtest-38a08.appspot.com",
-      //     messagingSenderId: "468063990879",
-      //     appId: "1:468063990879:web:bff323ac9357a0c23757ea",
-      //     measurementId: "G-8P0W60GG1X"
-      // };
-      //
-      var firebaseConfig = {
+    <!-- <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
         apiKey: "AIzaSyCWKAgyNFV22IpW5EA9MfOBhV6MHOpL7PI",
         authDomain: "uume-58fe8.firebaseapp.com",
         databaseURL: "https://uume-58fe8-default-rtdb.firebaseio.com",
@@ -543,33 +668,42 @@ https://templatemo.com/tm-557-grad-school
         appId: "1:1022617126475:web:0569a1422385e31debefce",
         measurementId: "${config.measurementId}"
       };
-
+    
       // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      firebase.analytics();
-      // firebase에서 읽기
-      var demo = document.getElementById("demo");
-      var preObject = document.getElementById("object");
-      var dbRef = firebase.database().ref().child("object");
-      //dbRef.on('value',snap => demo.innerHTML = snap.val());
-      dbRef.on('value',snap => {
-          preObject.innerText = JSON.stringify(snap.val(),null,3);
-      });
-    </script>
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
 
-    <!-- <script>
-      function myFunction() {
-          //document.getElementById("demo").innerHTML = "쓰기를 완료";
-          //alert("쓰기 완료");
-          
-          //firebase에 쓰기
-          var dbRefObject = firebase.database().ref();
-          //dbRefObject.child("object").set("Some Value");
-          dbRefObject.child("object").set(name);
+      // // 데베 참조 가져오기
+      // import { getDatabase } from "firebase/database";
+
+      // const database = getDatabase();
+
+      // 데이터 쓰기
+      //import { getDatabase, ref, set } from "firebase/database";
+      //writeUserData(userId, name, email, pnum)
+      function writeUserData() {
+        var userId = 915;
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var pnum = document.getElementById("phone-number").value;
+        console.log("hi");
+        console.log(userId);
+        console.log(name);
+        console.log(email);
+        console.log(pnum);
+
+        const db = getDatabase();
+        set(ref(db, 'users/' + userId), {
+          userId: userId
+          //username: name,
+          //email: email,
+          //phonenum : pnum
+        });
       }
     </script> -->
+    
 
-    <script>
+    <!-- <script>
       // 입력값 받기 + 파이어베이스의 myFunction() 기능
       //var temp;
 
@@ -596,7 +730,7 @@ https://templatemo.com/tm-557-grad-school
           //dbRefObject.child("object").set(name);
           //dbRefObject.child("object").set(email);
       }
-    </script>
+    </script> -->
 
     <!-- ================================================================================================================== -->
 
