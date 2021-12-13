@@ -1,6 +1,7 @@
 # Graduation-Project
 
-# UUME : 코드는 main이 아닌 각 branch에 팀원이 분담한 것을 나누어 놓았습니다. 
+# UUME 
+코드는 main이 아닌 각 branch에 팀원이 분담한 것을 나누어 놓았습니다. 
 
 "UUME" is an abbreviation of 'You understand me', and it is a program that monitors students' concentration and understanding of online lectures through a web cam.
 
