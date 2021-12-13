@@ -33,7 +33,6 @@ def calculateLength(LEyebrowX, LEyebrowY, REyebrowX, REyebrowY):
 
 
 def frownGlabellaCheck(list_points):
-    # 좌표 계산
     LEyebrowX = list_points[21][0]
     LEyebrowY = list_points[21][1]
     REyebrowX = list_points[22][0]
@@ -114,10 +113,9 @@ while True:
 
         cv.rectangle(img_frame, (face.left(), face.top()), (face.right(), face.bottom()), (0, 0, 255), 3)
 
-        cv.imshow('result', img_frame)
+        cv.imshow('result', cv.flip(img_frame, 1))
 
         key = cv.waitKey(1)
-
         if key == 27:
             break
         elif key == ord('1'):
@@ -136,3 +134,4 @@ while True:
         frownGlabellaCheck(list_points)
 
 cap.release()
+

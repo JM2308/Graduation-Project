@@ -59,9 +59,11 @@ def tiltedHeadCheck(image_width, image_height, points):
     lineResult1 = findLineFunction(NoseX, NoseY, MMouthX, MMouthY)  # Line1
 
     if not lineResult1:
-        print('AngleResult = 0')
+        ####################################################
+        # 고개를 갸웃거리지 않을 때
         print('Not Tilted Head')
         return -1
+        ####################################################
 
     lineResult2 = findLineFunction(RShoulderX, RShoulderY, LShoulderX, LShoulderY)  # Line2
 
@@ -69,32 +71,33 @@ def tiltedHeadCheck(image_width, image_height, points):
     m2 = lineResult2[0]
 
     angle = round(findAngle(m1, m2))
-    print('AngleResult = ' + str(angle))
 
     if angle <= 80:
+        ####################################################
+        # 고개를 갸웃거릴 때
         print('Tilted Head')
         return -1
+        ####################################################
     else:
+        ####################################################
+        # 고개를 갸웃거리지 않을 때
         print('Not Tilted Head')
         return 0
+        ####################################################
 
 
 def faceCloserCheck(image_width, image_height, points):
-    LEarX = points.landmark[mp_pose.PoseLandmark(9).value].x * image_width
-    LEarY = points.landmark[mp_pose.PoseLandmark(9).value].y * image_height
-    REarX = points.landmark[mp_pose.PoseLandmark(10).value].x * image_width
-    REarY = points.landmark[mp_pose.PoseLandmark(10).value].y * image_height
+    LEarX = points.landmark[mp_pose.PoseLandmark(7).value].x * image_width
+    LEarY = points.landmark[mp_pose.PoseLandmark(7).value].y * image_height
+    REarX = points.landmark[mp_pose.PoseLandmark(8).value].x * image_width
+    REarY = points.landmark[mp_pose.PoseLandmark(8).value].y * image_height
 
     faceLength = calculateLength(LEarX, LEarY, REarX, REarY)
-    print(faceLength)
 
     global preFaceLength
 
     if faceLength != 0:
-        if faceLength > (preFaceLength + 3):  # 조건 넣어주기
-            # print(faceLength)
-            # 길이 길어졌다가 다시 짧아졌을 때도 구분해줘야 함
-            # 이해 O -> 이해 X -> 이해 O
+        if faceLength > (preFaceLength + 3):
             preFaceLength = faceLength
             return True
         else:
@@ -102,7 +105,6 @@ def faceCloserCheck(image_width, image_height, points):
             return False
     else:
         preFaceLength = faceLength
-        # print(faceLength)
         return False
 
 
@@ -122,10 +124,8 @@ def frownGlabellaCheck(list_points):
     m2 = lineResult2[0]
 
     angle = findAngle(m1, m2)
-    print('AngleResult = ' + str(angle))
 
     glabellaLength = calculateLength(LEyebrowX, LEyebrowY, REyebrowX, REyebrowY)
-    print('GlabellaLengthResult = ' + str(glabellaLength))
 
     global initialAngle
     global initialGlabellaLength
@@ -135,16 +135,24 @@ def frownGlabellaCheck(list_points):
         initialGlabellaLength = glabellaLength
     else:
         if glabellaLength < initialGlabellaLength and angle < initialAngle:
+            ####################################################
+            # 미간을 찌푸릴 때
             print('Frown Glabella')
             return -1
+            ####################################################
         else:
+            ####################################################
+            # 미간을 찌푸리지 않을 때
             print('Not Frown Glabella')
             return 0
+            ####################################################
 
 
 # Camera
 def mediaPipeCameraPose(image, pose):
     # with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+        cv2.imshow('Result', cv2.flip(image, 1))
+
         image.flags.writeable = False
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         results = pose.process(image)
@@ -156,14 +164,14 @@ def mediaPipeCameraPose(image, pose):
 
         image_height, image_width, _ = image.shape
 
-        cv2.imshow('Result', cv2.flip(image, 1))
+        # 화면에 카메라 나오는 부분
+        # cv2.imshow('Result', cv2.flip(image, 1))
 
         return results.pose_landmarks
 
 
 def dlibCheck(image, gray):
     ret = detector(gray, 1)
-    print("2")
 
     for face in ret:
         shape = predictor(image, face)
@@ -206,6 +214,7 @@ def videoDetector(cam):
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
 
         while True:
+            print("############################################")
             ret, img = cam.read()
 
             img = cv2.resize(img, dsize=None, fx=1.0, fy=1.0)
@@ -220,19 +229,34 @@ def videoDetector(cam):
             image_height, image_width, _ = img.shape
 
             if len(results) == 0:
+                ####################################################
+                # 자리에 없을 때
                 print('The student isn\'t sitting in his/her seat.')
+                ####################################################
             elif len(results) >= 1:
+                ####################################################
+                # 자리에 있을 때
                 print('The student is sitting in his/her seat.')
+                ####################################################
                 pose_landmark = mediaPipeCameraPose(img, pose)
                 list_point = dlibCheck(img, gray)
 
+                # 고개 갸웃거리는 부분 체크
                 tiltedHeadCheck(image_width, image_height, pose_landmark)
 
+                # 얼굴 가까이하는 부분 체크
                 if faceCloserCheck(image_width, image_height, pose_landmark):
+                ####################################################
+                    # 얼굴 가까이 했을 때
                     print("Face Closer")
+                ####################################################
                 else:
+                ####################################################
+                    # 얼굴 가까이하지 않았을 때
                     print("Face isn't Closer")
+                ####################################################
 
+                # 미간 찌푸리는 부분 체크
                 frownGlabellaCheck(list_point)
 
             if cv2.waitKey(1) > 0:

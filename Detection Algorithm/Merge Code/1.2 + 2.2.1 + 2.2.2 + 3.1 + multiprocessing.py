@@ -3,7 +3,8 @@ import mediapipe as mp
 import math
 import dlib
 import numpy as np
-from multiprocessing import Process
+# from multiprocessing import Process
+import multiprocessing
 import time
 
 
@@ -36,6 +37,9 @@ def calculateLength(X1, Y1, X2, Y2):
 
 
 def tiltedHeadCheck(img, image_width, image_height, pose):
+    print("tiltedHeadCheck started")
+    start = time.time()
+
     # 0 : Nose | 1 : left_eye_inner | 2 : left_eye | 3 : left_eye_outer | 4 : right_eye_inner
     # 5 : right_eye | 6 : right_eye_outer | 7 : left_ear | 8 : right_ear | 9 : mouth_left
     # 10 : mouth_right | 11 : left_shoulder | 12 : right_shoulder | 13 : left_elbow | 14 : right_elbow
@@ -63,9 +67,7 @@ def tiltedHeadCheck(img, image_width, image_height, pose):
     lineResult1 = findLineFunction(NoseX, NoseY, MMouthX, MMouthY)  # Line1
 
     if not lineResult1:
-        # print('AngleResult = 0')
         print('Not Tilted Head')
-        return False
 
     lineResult2 = findLineFunction(RShoulderX, RShoulderY, LShoulderX, LShoulderY)  # Line2
 
@@ -73,50 +75,53 @@ def tiltedHeadCheck(img, image_width, image_height, pose):
     m2 = lineResult2[0]
 
     angle = round(findAngle(m1, m2))
-    # print('AngleResult = ' + str(angle))
 
     if angle <= 80:
-        print('Tilted Head')
-        return True
+        delta_t = time.time() - start
+        print("tiltedHeadCheck ended, took ", delta_t)
+        return 0
     else:
-        print('Not Tilted Head')
-        return False
+        delta_t = time.time() - start
+        print("tiltedHeadCheck ended, took ", delta_t)
+        return 0
 
 
 def faceCloserCheck(img, image_width, image_height, pose):
+    print("faceCloserCheck started")
+    start = time.time()
+
     points = mediaPipePoseSetting(img, pose)
 
-    LEarX = points.landmark[mp_pose.PoseLandmark(9).value].x * image_width
-    LEarY = points.landmark[mp_pose.PoseLandmark(9).value].y * image_height
-    REarX = points.landmark[mp_pose.PoseLandmark(10).value].x * image_width
-    REarY = points.landmark[mp_pose.PoseLandmark(10).value].y * image_height
+    LEarX = points.landmark[mp_pose.PoseLandmark(7).value].x * image_width
+    LEarY = points.landmark[mp_pose.PoseLandmark(7).value].y * image_height
+    REarX = points.landmark[mp_pose.PoseLandmark(8).value].x * image_width
+    REarY = points.landmark[mp_pose.PoseLandmark(8).value].y * image_height
 
     faceLength = calculateLength(LEarX, LEarY, REarX, REarY)
-    # print(faceLength)
 
     global preFaceLength
 
     if faceLength != 0:
         if faceLength > (preFaceLength + 3):  # 조건 넣어주기
-            # 길이 길어졌다가 다시 짧아졌을 때도 구분해줘야 함
-            # 이해 O -> 이해 X -> 이해 O
             preFaceLength = faceLength
-            print("Face Closer")
-            return True
+            delta_t = time.time() - start
+            print("faceCloserCheck ended, took ", delta_t)
         else:
             preFaceLength = faceLength
-            print("Face isn't Closer")
-            return False
+            delta_t = time.time() - start
+            print("faceCloserCheck ended, took ", delta_t)
     else:
         preFaceLength = faceLength
-        print("Face isn't Closer")
-        return False
+        delta_t = time.time() - start
+        print("faceCloserCheck ended, took ", delta_t)
 
 
 def frownGlabellaCheck(img, gray):
+    print("frownGlabellaCheck started")
+    start = time.time()
+
     list_points = dlibSetting(img, gray)
 
-    # 좌표 계산
     LEyebrowX = list_points[21][0]
     LEyebrowY = list_points[21][1]
     REyebrowX = list_points[22][0]
@@ -131,10 +136,8 @@ def frownGlabellaCheck(img, gray):
     m2 = lineResult2[0]
 
     angle = findAngle(m1, m2)
-    # print('AngleResult = ' + str(angle))
 
     glabellaLength = calculateLength(LEyebrowX, LEyebrowY, REyebrowX, REyebrowY)
-    # print('GlabellaLengthResult = ' + str(glabellaLength))
 
     global initialAngle
     global initialGlabellaLength
@@ -144,16 +147,15 @@ def frownGlabellaCheck(img, gray):
         initialGlabellaLength = glabellaLength
     else:
         if glabellaLength < initialGlabellaLength and angle < initialAngle:
-            print('Frown Glabella')
-            return True
+            delta_t = time.time() - start
+            print("frownGlabellaCheck ended, took ", delta_t)
         else:
-            print('Not Frown Glabella')
-            return False
+            delta_t = time.time() - start
+            print("frownGlabellaCheck ended, took ", delta_t)
 
 
 # Camera
 def mediaPipePoseSetting(image, pose):
-    # with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         image.flags.writeable = False
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         results = pose.process(image)
@@ -197,7 +199,6 @@ def videoDetector(cam, pose):
     img = cv2.resize(img, dsize=None, fx=1.0, fy=1.0)
 
     cv2.imshow('Result', cv2.flip(img, 1))
-    time.sleep(3)
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     results = cascade.detectMultiScale(gray,  # 입력 이미지
@@ -211,24 +212,29 @@ def videoDetector(cam, pose):
     if len(results) == 0:
         print('The student isn\'t sitting in his/her seat.')
     elif len(results) >= 1:
-        print('The student is sitting in his/her seat.')
+        # print('The student is sitting in his/her seat.')
 
-        p1 = Process(target=tiltedHeadCheck(img, image_width, image_height, pose))
-        p2 = Process(target=faceCloserCheck(img, image_width, image_height, pose))
-        p3 = Process(target=frownGlabellaCheck(img, gray))
+        #################################################
+        # 멀티프로세싱 부분
+        start = time.perf_counter()
+
+        p1 = multiprocessing.Process(target=tiltedHeadCheck(img, image_width, image_height, pose))
+        p2 = multiprocessing.Process(target=faceCloserCheck(img, image_width, image_height, pose))
         p1.start()
         p2.start()
-        p3.start()
         p1.join()
         p2.join()
-        p3.join()
+
+        finish = time.perf_counter()
+
+        print(f'{round(finish - start, 2)}초 만에 작업이 완료되었습니다.')
+        #################################################
+
         """
         # tiltedHeadCheck(img, image_width, image_height, pose)
         # faceCloserCheck(img, image_width, image_height, pose)
         frownGlabellaCheck(img, gray)
         """
-
-        # cv2.imshow('Result', cv2.flip(img, 1))
 
     if cv2.waitKey(1) > 0:
         return False

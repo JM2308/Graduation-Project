@@ -9,21 +9,17 @@ def calculateLength(LEarX, LEarY, REarX, REarY):
 
 
 def faceCloserCheck(image_width, image_height, points):
-    LEarX = points.landmark[mp_pose.PoseLandmark(9).value].x * image_width
-    LEarY = points.landmark[mp_pose.PoseLandmark(9).value].y * image_height
-    REarX = points.landmark[mp_pose.PoseLandmark(10).value].x * image_width
-    REarY = points.landmark[mp_pose.PoseLandmark(10).value].y * image_height
+    LEarX = points.landmark[mp_pose.PoseLandmark(7).value].x * image_width
+    LEarY = points.landmark[mp_pose.PoseLandmark(7).value].y * image_height
+    REarX = points.landmark[mp_pose.PoseLandmark(8).value].x * image_width
+    REarY = points.landmark[mp_pose.PoseLandmark(8).value].y * image_height
 
     faceLength = calculateLength(LEarX, LEarY, REarX, REarY)
-    print(faceLength)
 
     global preFaceLength
 
-    if faceLength != 0:
+    if preFaceLength != 0:
         if faceLength > (preFaceLength + 3):  # 조건 넣어주기
-            # print(faceLength)
-            # 길이 길어졌다가 다시 짧아졌을 때도 구분해줘야 함
-            # 이해 O -> 이해 X -> 이해 O
             preFaceLength = faceLength
             return True
         else:
@@ -31,48 +27,34 @@ def faceCloserCheck(image_width, image_height, points):
             return False
     else:
         preFaceLength = faceLength
-        # print(faceLength)
         return False
 
 
-# Camera
 def mediaPipeCameraPose(cap):
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+        success, image = cap.read()
 
-        while True:
-            success, image = cap.read()
+        image.flags.writeable = False
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        results = pose.process(image)
 
-            if not success:
-              print("Ignoring empty camera frame.")
-              continue
+        image.flags.writeable = True
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+                                  landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
 
-            image = cv2.imread('../Test Image/face4.png')
+        image_height, image_width, _ = image.shape
 
-            image.flags.writeable = False
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            results = pose.process(image)
+        if faceCloserCheck(image_width, image_height, results.pose_landmarks):
+            print("Face Closer")
+        else:
+            print("Face isn't Closer")
 
-            image.flags.writeable = True
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-            mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+        cv2.imshow('MediaPipe Pose', cv2.flip(image, 1))
 
-            image_height, image_width, _ = image.shape
+        if cv2.waitKey(5) & 0xFF == 27:
+            return False
 
-            if faceCloserCheck(image_width, image_height, results.pose_landmarks):
-                print("Face Closer")
-            else:
-                print("Face isn't Closer")
-
-            cv2.imshow('MediaPipe Pose', cv2.flip(image, 1))
-
-            if cv2.waitKey(5) & 0xFF == 27:
-              break
-
-
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
-mp_pose = mp.solutions.pose
 
 # 0 : Nose | 1 : left_eye_inner | 2 : left_eye | 3 : left_eye_outer | 4 : right_eye_inner
 # 5 : right_eye | 6 : right_eye_outer | 7 : left_ear | 8 : right_ear | 9 : mouth_left
@@ -82,15 +64,18 @@ mp_pose = mp.solutions.pose
 # 25 : left_knee | 26 : right_knee | 27 : left_ankle | 28 : right_ankle | 29 : left_heel
 # 30 : right_heel | 31 : left_foot_index | 32.right_foot_index
 
-# Camera
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
+mp_pose = mp.solutions.pose
+
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
-# Initial Setting
 preFaceLength = 0
 
 if cap.isOpened():
     while True:
-        mediaPipeCameraPose(cap)
+        if not mediaPipeCameraPose(cap):
+            break
 else:
     print("can't open camera")
 

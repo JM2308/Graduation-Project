@@ -1,0 +1,55 @@
+<!--videosender.html-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello</title>
+</head>
+<body>
+	<div class="A">
+		<video id="videoInput" style="display:none" autoplay></video>
+		<canvas id="videoOutput"></canvas>
+	</div>
+</body>
+<script>
+  var w = 320, h = 240;
+  var url = "ws://localhost:3000"
+  var ws = new WebSocket(url);
+  ws.onopen = function(){
+    console.log("Websocket is connected.");
+  }
+  ws.onmessage = function(msg){
+  	console.log(msg.data);
+  }
+
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+  var constraints = {audio: false, video: true};
+  var video = document.getElementById("videoInput");
+  video.width = w;
+  video.height = h;
+
+  setInterval(function sendImage(){
+        var rawData = canvas.toDataURL("image/jpeg", 0.5);
+        ws.send(rawData);
+    }, 30);
+
+  function successCallback(stream){
+  	video.srcObject = stream;
+  	video.play();
+  }
+  
+  function errorCallback(error){
+   	console.log(error);
+  }
+  navigator.getUserMedia(constraints, successCallback, errorCallback);
+  var canvas = document.getElementById("videoOutput");
+  canvas.width = w;
+  canvas.height = h;
+  var ctx = canvas.getContext("2d");
+  function processImage(){
+        ctx.drawImage(video, 0, 0, w, h);
+        setTimeout(processImage, 1);
+  }
+
+  processImage();
+</script>
+</html>
