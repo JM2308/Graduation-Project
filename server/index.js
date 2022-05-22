@@ -57,6 +57,10 @@ io.on('connection', (socket) => {
     socketList[socket.id] = { userName, video: true, audio: true };
 
     // 여기서 roomId, userName 파이썬으로 보내기
+    // const r=spawn('python', ['1.2 + 2.2.1 + 2.2.2 + 3.1 -Web version.py']);
+    // r.stdout.on('data', function(data){
+    //   console.log(data.toString());
+    // });
 
     // Set User List
     io.sockets.in(roomId).clients((err, clients) => {

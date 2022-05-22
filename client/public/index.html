@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+  <head
+  Content-Disposition: attachment; filename="test.png">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
@@ -47,97 +48,97 @@
       };
 
       // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const db = getDatabase(app);
+      // const app = initializeApp(firebaseConfig);
+      // const db = getDatabase(app);
 
-      var state11="";
-      var state12="";
-      var state13="";
+      // var state11="";
+      // var state12="";
+      // var state13="";
 
-      var state21="";
-      var state22="";
-      var state23="";
+      // var state21="";
+      // var state22="";
+      // var state23="";
 
-      var p10=document.getElementById("p10");
-      var p11=document.getElementById("p11");
-      var p12=document.getElementById("p12");
-      var p13=document.getElementById("p13");
+      // var p10=document.getElementById("p10");
+      // var p11=document.getElementById("p11");
+      // var p12=document.getElementById("p12");
+      // var p13=document.getElementById("p13");
 
-      var p20=document.getElementById("p20");
-      var p21=document.getElementById("p21");
-      var p22=document.getElementById("p22");
-      var p23=document.getElementById("p23");
+      // var p20=document.getElementById("p20");
+      // var p21=document.getElementById("p21");
+      // var p22=document.getElementById("p22");
+      // var p23=document.getElementById("p23");
 
-      // 파이어베이스에서 읽어오기
-      const dbRef11=ref(db, 'minsu/in_seat');
-      onValue(dbRef11, (snapshot) => {
-        if(snapshot.val()==0){
-          state11="In seat=0"
-          p11.innerHTML=state11;
-        }
-        else if(snapshot.val()==1){
-          state11="In seat=1";
-          p11.innerHTML=state11;
-        }
-      });
-      const dbRef12=ref(db, 'minsu/tilted');
-      onValue(dbRef12, (snapshot) => {
-        if(snapshot.val()==0){
-          state12="Tilted=0";
-          p12.innerHTML=state12;
-        }
-        else if(snapshot.val()==1){
-          state12="Tilted=1";
-          p12.innerHTML=state12;
-        }
-      });
-      const dbRef13=ref(db, 'minsu/face_closer');
-      onValue(dbRef13, (snapshot) => {
-        if(snapshot.val()==0){
-          state13="Face closer=0";
-          p13.innerHTML=state13;
-        }
-        else if(snapshot.val()==1){
-          state13="Face closer=1";
-          p13.innerHTML=state13;
-        }
-      });
+      // // 파이어베이스에서 읽어오기
+      // const dbRef11=ref(db, 'minsu/in_seat');
+      // onValue(dbRef11, (snapshot) => {
+      //   if(snapshot.val()==0){
+      //     state11="In seat=0"
+      //     p11.innerHTML=state11;
+      //   }
+      //   else if(snapshot.val()==1){
+      //     state11="In seat=1";
+      //     p11.innerHTML=state11;
+      //   }
+      // });
+      // const dbRef12=ref(db, 'minsu/tilted');
+      // onValue(dbRef12, (snapshot) => {
+      //   if(snapshot.val()==0){
+      //     state12="Tilted=0";
+      //     p12.innerHTML=state12;
+      //   }
+      //   else if(snapshot.val()==1){
+      //     state12="Tilted=1";
+      //     p12.innerHTML=state12;
+      //   }
+      // });
+      // const dbRef13=ref(db, 'minsu/face_closer');
+      // onValue(dbRef13, (snapshot) => {
+      //   if(snapshot.val()==0){
+      //     state13="Face closer=0";
+      //     p13.innerHTML=state13;
+      //   }
+      //   else if(snapshot.val()==1){
+      //     state13="Face closer=1";
+      //     p13.innerHTML=state13;
+      //   }
+      // });
       
-      const dbRef21=ref(db, 'jimin/in_seat');
-      onValue(dbRef21, (snapshot) => {
-        if(snapshot.val()==0){
-          state21="In seat=0";
-          p21.innerHTML=state21;
-        }
-        else if(snapshot.val()==1){
-          state21="In seat=1";
-          p21.innerHTML=state21;
-        }
-      });
-      const dbRef22=ref(db, 'jimin/tilted');
-      onValue(dbRef22, (snapshot) => {
-        if(snapshot.val()==0){
-          state22="Tilted=0";
-          p22.innerHTML=state22;
-        }
-        else if(snapshot.val()==1){
-          state22="Tilted=1";
-          p22.innerHTML=state22;
-        }
-      });
-      const dbRef23=ref(db, 'jimin/face_closer');
-      onValue(dbRef23, (snapshot) => {
-        if(snapshot.val()==0){
-          state23="Face closer=0";
-          p23.innerHTML=state23;
-        }
-        else if(snapshot.val()==1){
-          state23="Face closer=1";
-          p23.innerHTML=state23;
-        }
-      });
+      // const dbRef21=ref(db, 'jimin/in_seat');
+      // onValue(dbRef21, (snapshot) => {
+      //   if(snapshot.val()==0){
+      //     state21="In seat=0";
+      //     p21.innerHTML=state21;
+      //   }
+      //   else if(snapshot.val()==1){
+      //     state21="In seat=1";
+      //     p21.innerHTML=state21;
+      //   }
+      // });
+      // const dbRef22=ref(db, 'jimin/tilted');
+      // onValue(dbRef22, (snapshot) => {
+      //   if(snapshot.val()==0){
+      //     state22="Tilted=0";
+      //     p22.innerHTML=state22;
+      //   }
+      //   else if(snapshot.val()==1){
+      //     state22="Tilted=1";
+      //     p22.innerHTML=state22;
+      //   }
+      // });
+      // const dbRef23=ref(db, 'jimin/face_closer');
+      // onValue(dbRef23, (snapshot) => {
+      //   if(snapshot.val()==0){
+      //     state23="Face closer=0";
+      //     p23.innerHTML=state23;
+      //   }
+      //   else if(snapshot.val()==1){
+      //     state23="Face closer=1";
+      //     p23.innerHTML=state23;
+      //   }
+      // });
     </script>
-    <div style="float:left; width:50%;">
+    <!-- <div style="float:left; width:50%;">
       <p id="p10">minsu : </p>
       <p id="p11"></p>
       <p id="p12"></p>
@@ -148,7 +149,8 @@
       <p id="p21"></p>
       <p id="p22"></p>
       <p id="p23"></p>
-    </div>
+    </div> -->
     <!--  -->
+
   </body>
 </html>

@@ -32,6 +32,12 @@ const Main = (props) => {
       setErr(true);
       setErrMsg('Enter Room Name or User Name');
     } else {
+      // 여기 바꿈
+      // const r=spawn('python', ['type.py']);
+      // r.stdout.on('data', function(data){
+      //   console.log(data.toString());
+      // });
+      // 
       socket.emit('BE-check-user', { roomId: roomName, userName });
     }
   }

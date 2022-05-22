@@ -5,6 +5,7 @@ import socket from '../../socket';
 import VideoCard from '../Video/VideoCard';
 import BottomBar from '../BottomBar/BottomBar';
 import Chat from '../Chat/Chat';
+// import html2canvas from 'html2canvas';
 
 const Room = (props) => {
   const currentUser = sessionStorage.getItem('user');
@@ -111,6 +112,35 @@ const Room = (props) => {
           });
           peersRef.current = peersRef.current.filter(({ peerID }) => peerID !== userId );
         });
+
+        // 여기 수정
+        const track = stream.getVideoTracks()[0];
+        let imageCapture = new ImageCapture(track);
+        console.log(imageCapture);
+        
+        setInterval(() => {
+          imageCapture.grabFrame()
+          .then(imageBitmap => {
+            console.log(imageBitmap);
+
+            var canvas = document.createElement('canvas');
+            canvas.width = 640;
+            canvas.height = 480;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(imageBitmap, 0, 0);
+            // document.body.appendChild(canvas);
+            
+            var dataURL = canvas.toDataURL();
+            var element = document.createElement('a');
+            // element.src="C:\Users\leeminsu\Downloads\testing";
+            element.download = 'test.png';
+            element.href = dataURL;
+            document.body.appendChild(element);
+            element.click();
+          });
+
+        }, 3000);
+        // 
       });
 
     socket.on('FE-toggle-camera', ({ userId, switchTarget }) => {
@@ -346,7 +376,7 @@ const Room = (props) => {
       <VideoAndBarContainer>
         <VideoContainer>
           {/* Current User Video */}
-          <VideoBox
+          <VideoBox id="div"
             className={`width-peer${peers.length > 8 ? '' : peers.length}`}
           >
             {userVideoAudio['localUser'].video ? null : (
