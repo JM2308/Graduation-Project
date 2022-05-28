@@ -1,6 +1,6 @@
-# Graduation-Project
+# UUME
 
-# UUME  
+-------------------------------
 
 "UUME" is an abbreviation of 'You understand me', and it is a program that monitors students' concentration and understanding of online lectures through a web cam.
 
@@ -24,32 +24,47 @@
 
  It recognizes the movement and behavior of the student's face and analyzes the student's concentration and understanding. And the results of the analysis are communicated to the educator to help flexible lectures and provide feedback on the class.
 
+### System structure
+![image](https://user-images.githubusercontent.com/33173280/170811252-45580277-6e4f-4225-af28-630db9690640.png)
 
 
-## 3. Key features
+
+## 3. Algorithm
 
 It is a high-accuracy system by measuring through analysis of behavioral patterns and facial movements when grasping concentration and understanding.
 
 As a result of conducting a survey to classify behavior during analysis, the following behaviors appear when the content of the class is not understood.
 
-* Tilt your head.
 * Frown your brows.
+* Tilt your head.
 * Get closer to the screen.
-* Hands go to my head or face.
 
-Based on our survey results, we consider these 5 behaviors to be behaviors that occur when we don't understand them. If it is judged that at least one of the five behaviors is the result of recognizing students' behavior and facial movements, it is classified as not understood.
+Based on our survey results, we made an algorithm to gauge student's concentration and understanding.
 
-
-
-## 4. Technology
+### Algorithm flowchart
+![image](https://user-images.githubusercontent.com/33173280/170812525-b24f7249-f1ce-4ebc-9059-afac78944258.png)
 
 
-<img width="353" alt="tech" src="https://user-images.githubusercontent.com/74062797/145826468-22712933-9a0c-4121-ae17-a44951aedfbf.png">
+## 4. APIs and libraries used
 
 
 
+![tec](https://user-images.githubusercontent.com/33173280/170811111-59ffd9cc-3f2c-4c5a-81df-98f70fa1b9a4.png)
 
-## 7. Timeline
+
+## 5. Results
+
+### Main web page
+![image](https://user-images.githubusercontent.com/33173280/170814431-5a156fae-3ca9-406e-bd67-b2960f7e23d9.png)
+
+### Online class room
+![image](https://user-images.githubusercontent.com/33173280/170814456-40d5d5a3-dd15-4b6b-81cb-15593a6bc88c.png)
+
+### Analytics page for educators
+![image](https://user-images.githubusercontent.com/33173280/170814598-0a547b99-2f70-41d6-aee9-2852778a3d03.png)
+
+
+## 6. Timeline
 
 
 <table>
@@ -83,3 +98,12 @@ Based on our survey results, we consider these 5 behaviors to be behaviors that 
         <td colspan="4"><center>Documentation</center></td>
     </tr>
 </table>
+
+## 7. Reference
+
+[webrtc reference](https://github.com/Hyunse/video-group-meeting)
+
+[eye tracking reference](https://github.com/antoinelame/GazeTracking)
+
+
+
